@@ -1,0 +1,19 @@
+{
+  "name": "kvlrapro4",
+  "version": "1.0.0",
+  "description": "Duo-opdracht Programmeren 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rudwan97/kvlrapro4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rudwan97/kvlrapro4/issues"
+  },
+  "homepage": "https://github.com/rudwan97/kvlrapro4#readme"
+}
