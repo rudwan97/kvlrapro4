@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Webstorm/.idea/encodings.xml
 Webstorm/.idea/jwt.iml
 Webstorm/.idea/modules.xml
@@ -6,8 +5,3 @@ Webstorm/.idea/workspace.xml
 Webstorm/.idea/
 Webstorm/node_modules/
 
-=======
-
-.idea/
-node_modules/
->>>>>>> Br@nch3-0f-D00m
