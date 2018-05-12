@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 .idea/
 node_modules/
+=======
+Webstorm/.idea/encodings.xml
+Webstorm/.idea/jwt.iml
+Webstorm/.idea/modules.xml
+Webstorm/.idea/workspace.xml
+Webstorm/.idea/
+Webstorm/node_modules/
+>>>>>>> parent of 186d66a... Merge branch 'Br@nch3-0f-D00m' into development
 
