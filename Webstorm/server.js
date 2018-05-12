@@ -7,6 +7,6 @@ app.all('*', (req,respons)=>{
     respons.json('invalid request');
 });
 
-app.listen(8080, ()=>{
+app.listen(process.env.PORT, ()=>{
     console.log('server started');
 });
