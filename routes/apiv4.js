@@ -21,7 +21,20 @@ router.get('/cpu/intel/:year?', (req, res) =>{
     res.json(qresult);
 });
 
-router.get('/user/:naam', (req,res,next) =>{
+router.get('/add', (req,res,next) =>{
+    const name = req.params.naam;
+
+    db.query('INSERT INTO studentenhuis (Naam, Adres, UserID) VALUES (Test, Test, Test, 2);',
+        (error, rows, fields) => {
+            if (error) {
+                res.status(500).json(error.toString())
+            } else {
+                res.status(200).json(rows)
+            }
+        })
+});
+
+router.get('/studentenhuis', (req,res,next) =>{
     const name = req.params.naam;
 
     db.query('SELECT * FROM studentenhuis',
@@ -33,4 +46,5 @@ router.get('/user/:naam', (req,res,next) =>{
             }
         })
 });
+
 module.exports = router;
