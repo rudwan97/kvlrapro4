@@ -3,6 +3,7 @@ const db = require('../db/connector');
 const express = require('express');
 const data = require('../modules/intel');
 const router = express.Router();
+const assert = require('assert');
 
 
 router.get('/cpu/intel/:year?', (req, res) =>{
@@ -21,17 +22,44 @@ router.get('/cpu/intel/:year?', (req, res) =>{
     res.json(qresult);
 });
 
-router.get('/add', (req,res,next) =>{
-    const name = req.params.naam;
+// router.post('/add', (req,res,next) =>{
+//     const name = req.params.naam;
+//
+//     db.query('INSERT INTO studentenhuis (Naam, Adres, UserID) VALUES (Test, Test, 2);',
+//         (error, rows, fields) => {
+//             if (error) {
+//                 res.status(500).json(error.toString())
+//             } else {
+//                 res.status(200).json(rows)
+//             }
+//         })
+// });
 
-    db.query('INSERT INTO studentenhuis (Naam, Adres, UserID) VALUES (Test, Test, 2);',
-        (error, rows, fields) => {
-            if (error) {
-                res.status(500).json(error.toString())
-            } else {
-                res.status(200).json(rows)
-            }
-        })
+router.post('/studentenhuis', (req, res, next) => {
+
+    let studentenhuis = req.body;
+
+    assert.equal(typeof (req.body.first_name), 'string', "Argument 'first_name' must be a string.");
+    assert.equal(typeof (req.body.last_name), 'string', "Argument 'last_name' must be a string.");
+
+
+    const query = {
+        sql: 'INSERT INTO `studentenhuis`(first_name, last_name) VALUES (?, ?)',
+        values: [studentenhuis.first_name, studentenhuis.last_name],
+        timeout: 2000
+    };
+
+    console.log('QUERY: ' + query.sql);
+
+    db.query( query, (error, rows, fields) => {
+        if (error) {
+            res.status(500).json(error.toString())
+        } else {
+            res.status(200).json(rows)
+        }
+    })
+    res.status(200).json('ok')
+
 });
 
 router.get('/studentenhuis', (req,res,next) =>{
