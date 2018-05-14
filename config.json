@@ -1,0 +1,8 @@
+{
+  "secretkey" : "MyServerSuperSecretKey-123454321AbCd-",
+  "dbUsername": "studentenhuis_user",
+  "dbPassword": "secret",
+  "dbSchema"  : "studentenhuis",
+  "dbServer"  : "188.166.109.108",
+  "port"      : "3000"
+}
