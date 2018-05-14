@@ -3,6 +3,6 @@
   "dbUsername": "studentenhuis_user",
   "dbPassword": "secret",
   "dbSchema"  : "studentenhuis",
-  "dbServer"  : "188.166.109.108",
+  "dbServer"  : "localhost",
   "port"      : "3000"
 }
