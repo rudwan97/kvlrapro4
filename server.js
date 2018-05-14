@@ -15,7 +15,9 @@ app.all('*', (request, respons)=>{
     respons.status(500);
 });
 //
-app.listen(process.env.PORT, () =>{
+
+var port = process.env.PORT || 8080
+app.listen(port, () =>{
     console.log("the magic happens at !" +
         "8080");
 });
