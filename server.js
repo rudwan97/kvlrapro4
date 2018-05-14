@@ -10,7 +10,7 @@ app.get('/api/hello', (request, res, next) =>{
     next();
 });
 
-app.use('/apiv4', require('./routes/apiv4'));
+app.use('/apiv3', require('./routes/apiv3'));
 app.all('*', (request, respons)=>{
     respons.status(500);
 });
