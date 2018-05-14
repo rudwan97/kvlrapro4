@@ -20,8 +20,7 @@ app.all('*', (request, respons)=>{
 });
 //
 
-var port = 8080
+var port = 8080;
 app.listen(port, () =>{
-    console.log("the magic happens at !" +
-        "8080");
+    console.log("server is starting");
 });
