@@ -4,14 +4,16 @@ const router = express.Router();
 const db = require('../db/connector');
 const auth =  require('../auth/authentication');
 
+let payloadid;
+
 router.all( new RegExp("[^(/login|register)]"), function (req, res, next) {
 
-    //
     console.log("VALIDATE TOKEN")
 
     var token = (req.header('X-Access-Token')) || '';
 
     auth.decodeToken(token, (err, payload) => {
+        payloadid= payload.sub
         if (err) {
             console.log('Error handler: ' + err.message);
             res.status((err.status || 401 )).json({error: new Error("Not authorised").message});
@@ -21,17 +23,13 @@ router.all( new RegExp("[^(/login|register)]"), function (req, res, next) {
     });
 });
 
-
-
-//
-// Login with {"username":"<username>", "password":"<password>"}
-//
 // TODO: Zorgen dat er niet ingelogd kan worden met lege waarden
 router.route('/login')
 
     .post( function(req, res) {
 
         console.log("login request..");
+
 
         var mail = req.body.mail || '';
         var password = req.body.password || '';
@@ -107,7 +105,9 @@ router.route('/register')
     });
 
 router.get('/studentenhuis/:id?', (req,res,next) => {
+
     const id = req.params.id || '';
+
     if (id == '') {
         db.query('SELECT * ' +
             'FROM studentenhuis',
@@ -197,7 +197,31 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
         })
 });
 
+//TODO: Zorgen dat er niet gepost kan worden met lege bodys
+router.route('/studentenhuis')
+
+    .post( function(req, res) {
+
+        var name = req.body.naam || '';
+        var adress = req.body.adres || '';
+        var id = payloadid || '';
+
+        const postquery = 'INSERT INTO `studentenhuis` (`Naam`,`Adres`,`UserID`)\n' +
+            'VALUES(\''+ name +'\',\''+adress +'\',' + id + ')'
+        console.log(postquery);
+
+        db.query(postquery,
+            (error, rows, fields) => {
+                if (error) {
+                    res.status(500).json(error.toString())
+                } else {
+                    res.json({message: 'Studentenhuis toegevoegd.'})
+                }
+            })
+    });
+
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
+
 module.exports = router;
