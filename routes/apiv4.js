@@ -44,7 +44,7 @@ router.post('/studentenhuis', (req, res, next) => {
 
 
     const query = {
-        sql: 'INSERT INTO `studentenhuis`(first_name, last_name) VALUES (?, ?)',
+        sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?, ?,2)',
         values: [studentenhuis.first_name, studentenhuis.last_name],
         timeout: 2000
     };
