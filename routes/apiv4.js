@@ -1,3 +1,4 @@
+
 const express = require('express');
 const data = require('../modules/intel');
 const router = express.Router();
@@ -87,6 +88,9 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
 
 
         db.query('SELECT `Voornaam`, `Achternaam`, `Email` FROM `user` WHERE `ID` = ' + userid[0],
+
+
+
         (error, rows, fields) => {
             if (error) {
                 res.status(500).json(error.toString())
@@ -97,6 +101,7 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
         })
 
 });
+
 
 
 
