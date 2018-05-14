@@ -268,7 +268,11 @@ router.route('/studentenhuis/:id')
 router.route('/studentenhuis/:id')
     .delete(function (req,res) {
 
-        let olduserid;
+        var name = req.body.naam || '';
+        var adress = req.body.adres || '';
+        var houseId = req.params.id;
+        var id = payloadid || '';
+        var olduserid;
         try {
             const useridquery = 'SELECT * ' +
                 'FROM studentenhuis WHERE ID=' + houseId + ' ' +
@@ -287,10 +291,10 @@ router.route('/studentenhuis/:id')
         }catch (e) {
 
         }
-        const updatequery = 'DELETE studentenhuis SET `Naam` = \''+name+'\', `Adres` = \''+adress+'\' WHERE `UserID`= \''+ id +'\' AND `ID` = \''+houseId+'\''
+        const deletequery = 'DELETE FROM studentenhuis WHERE `UserID`= '+ id +' AND `ID` = '+houseId
 
-        console.log(updatequery) ;
-        db.query(updatequery,
+        console.log(deletequery) ;
+        db.query(deletequery,
             (error, rows, fields) => {
                 if (error) {
                     res.status(500).json(error.toString())
@@ -298,7 +302,7 @@ router.route('/studentenhuis/:id')
                 else if(olduserid !== id){
                     res.json({message:"niet geautoriseerd."})
                 }else {
-                    res.json({message: 'Studentenhuis geupdate.'})
+                    res.json({message: 'Studentenhuis gedelete.'})
                 }
 
             })
