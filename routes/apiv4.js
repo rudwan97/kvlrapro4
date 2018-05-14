@@ -24,7 +24,7 @@ router.get('/cpu/intel/:year?', (req, res) =>{
 router.get('/add', (req,res,next) =>{
     const name = req.params.naam;
 
-    db.query('INSERT INTO studentenhuis (Naam, Adres, UserID) VALUES (Test, Test, Test, 2);',
+    db.query('INSERT INTO studentenhuis (Naam, Adres, UserID) VALUES (Test, Test, 2);',
         (error, rows, fields) => {
             if (error) {
                 res.status(500).json(error.toString())
