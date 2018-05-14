@@ -1,6 +1,8 @@
 const express = require('express');
 const data = require('../modules/intel');
 const router = express.Router();
+const db = require('../db/connector');
+
 
 
 router.get('/cpu/intel/:year?', (req, res) =>{
