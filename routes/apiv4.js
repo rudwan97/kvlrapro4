@@ -306,11 +306,6 @@ router.route('/studentenhuis/:id')
                 }
 
             })
-
-
-
-
-
     });
 
 function isEmpty(str) {
