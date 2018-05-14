@@ -40,23 +40,26 @@ router.route('/poststudentenhuis').post(function (req,res) {
         var adress = req.body.adress || '';
         var userid = 1;
 
-
-        const query = {
-            sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?,?,?)',
-            values: [naam, adress, userid],
-            timeout: 2000
-        };
-
-        console.log('QUERY: ' + query.sql);
-
-        db.query(query, (error, rows, fields) => {
-            if (error) {
-                res.status(500).json(error.toString())
-            } else {
-                res.status(200).json(rows)
-            }
-        });
-        res.status(200).json('ok')
+        console.log(naam);
+    console.log(adress);
+    console.log(userid);
+        //
+        // const query = {
+        //     sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?,?,?)',
+        //     values: [naam, adress, userid],
+        //     timeout: 2000
+        // };
+        //
+        // console.log('QUERY: ' + query.sql);
+        //
+        // db.query(query, (error, rows, fields) => {
+        //     if (error) {
+        //         res.status(500).json(error.toString())
+        //     } else {
+        //         res.status(200).json(rows)
+        //     }
+        // });
+        // res.status(200).json('ok')
 });
 
 router.get('/studentenhuis', (req,res,next) =>{
