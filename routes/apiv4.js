@@ -37,15 +37,16 @@ router.get('/cpu/intel/:year?', (req, res) =>{
 
 router.post('/studentenhuis', (req, res, next) => {
 
-    let studentenhuis = req.body;
+    var naam = req.body.naam || '';
+    var adress = req.body.adress || '';
+    var userid = 1;
 
-    assert.equal(typeof (req.body.first_name), 'string', "Argument 'first_name' must be a string.");
-    assert.equal(typeof (req.body.last_name), 'string', "Argument 'last_name' must be a string.");
+
 
 
     const query = {
-        sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?, ?,2)',
-        values: [studentenhuis.first_name, studentenhuis.last_name],
+        sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?,?,?)',
+        values: [naam, adress,userid],
         timeout: 2000
     };
 
