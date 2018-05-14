@@ -32,35 +32,31 @@ router.get('/cpu/intel/:year?', (req, res) =>{
 //             } else {
 //                 res.status(200).json(rows)
 //             }
-//         })
+//         }
 // });
 
-router.post('/studentenhuis', (req, res, next) => {
-
-    var naam = req.body.naam || '';
-    var adress = req.body.adress || '';
-    var userid = 1;
-
+router.route('/poststudentenhuis').post(function (req,res) {
+        var naam = req.body.naam || '';
+        var adress = req.body.adress || '';
+        var userid = 1;
 
 
+        const query = {
+            sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?,?,?)',
+            values: [naam, adress, userid],
+            timeout: 2000
+        };
 
-    const query = {
-        sql: 'INSERT INTO `studentenhuis`(Naam, Adres, UserID) VALUES (?,?,?)',
-        values: [naam, adress,userid],
-        timeout: 2000
-    };
+        console.log('QUERY: ' + query.sql);
 
-    console.log('QUERY: ' + query.sql);
-
-    db.query( query, (error, rows, fields) => {
-        if (error) {
-            res.status(500).json(error.toString())
-        } else {
-            res.status(200).json(rows)
-        }
-    })
-    res.status(200).json('ok')
-
+        db.query(query, (error, rows, fields) => {
+            if (error) {
+                res.status(500).json(error.toString())
+            } else {
+                res.status(200).json(rows)
+            }
+        });
+        res.status(200).json('ok')
 });
 
 router.get('/studentenhuis', (req,res,next) =>{
