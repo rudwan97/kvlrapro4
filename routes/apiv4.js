@@ -3,6 +3,9 @@ const data = require('../modules/intel');
 const router = express.Router();
 const db = require('../db/connector');
 
+
+
+
 router.get('/studentenhuis/:id?', (req,res,next) => {
 
     const id = req.params.id || '';
@@ -84,8 +87,6 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
                     }
                 }
             })
-
-
         db.query('SELECT `Voornaam`, `Achternaam`, `Email` FROM `user` WHERE `ID` = ' + userid[0],
         (error, rows, fields) => {
             if (error) {
@@ -95,7 +96,6 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
                 console.log(rows)
             }
         })
-
 });
 
 
