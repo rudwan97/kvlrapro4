@@ -1,4 +1,5 @@
 const express = require('express');
+var bodyParser 	= require('body-parser');
 
 const app = express();
 
@@ -9,6 +10,9 @@ app.get('/api/hello', (request, res, next) =>{
     console.log("gelukt");
     next();
 });
+
+app.use(bodyParser.urlencoded({ extended:true }));
+app.use(bodyParser.json());
 
 app.use('/apiv4', require('./routes/apiv4'));
 app.all('*', (request, respons)=>{

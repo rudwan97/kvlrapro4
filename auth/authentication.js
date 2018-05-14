@@ -9,11 +9,9 @@ const jwt = require('jwt-simple')
 //
 // Encode (from username to token)
 //
-function encodeToken(username) {
+function encodeToken(userid) {
     const playload = {
-        exp: moment().add(10, 'days').unix(),
-        iat: moment().unix(),
-        sub: username   // or any object you choose!
+        sub: userid   // or any object you choose!
     }
     return jwt.encode(playload, settings.secretkey)
 }
@@ -26,8 +24,9 @@ function decodeToken(token, callback) {
     try {
         const payload = jwt.decode(token, settings.secretkey)
 
+
         // Check if the token has expired.
-        const now = moment().unix()
+        const now = moment().unix();
         if (now > payload.exp) {
             // console.log('Token has expired.')
             callback('Token has expired!', null)
