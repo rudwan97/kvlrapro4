@@ -198,6 +198,7 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
 });
 
 //TODO: Zorgen dat er niet gepost kan worden met lege bodys
+//TODO: Correcte fout afhandeling
 router.route('/studentenhuis')
 
     .post( function(req, res) {
@@ -218,6 +219,94 @@ router.route('/studentenhuis')
                     res.json({message: 'Studentenhuis toegevoegd.'})
                 }
             })
+    });
+
+router.route('/studentenhuis/:id')
+    .put(function (req, res) {
+        var name = req.body.naam || '';
+        var adress = req.body.adres || '';
+        var houseId = req.params.id;
+        var id = payloadid || '';
+        var olduserid;
+
+        try {
+
+        
+        const useridquery = 'SELECT * ' +
+            'FROM studentenhuis WHERE ID=' + houseId + ' AND ADRES = \'' + adress + '\' AND Naam = \'' + name + '\''
+        console.log(useridquery)
+        db.query(useridquery,
+            (error, rows, fields) => {
+                if (error) {
+                    res.status(500).json(error.toString())
+                } else {
+                    olduserid = rows[0].UserID;
+                    console.log("oorspronkelijke userid: " + olduserid);
+                }
+            })
+    }catch (e) {
+            
+        }
+
+        const updatequery = 'UPDATE studentenhuis SET `Naam` = \''+name+'\', `Adres` = \''+adress+'\' WHERE `UserID`= \''+ id +'\' AND `ID` = \''+houseId+'\''
+
+        console.log(updatequery) ;
+        db.query(updatequery,
+            (error, rows, fields) => {
+                if (error) {
+                    res.status(500).json(error.toString())
+                }
+                else if(olduserid !== id){
+                    res.json({message:"niet geautoriseerd."})
+                }else {
+                    res.json({message: 'Studentenhuis geupdate.'})
+                }
+
+            })
+    });
+
+router.route('/studentenhuis/:id')
+    .delete(function (req,res) {
+
+        let olduserid;
+        try {
+            const useridquery = 'SELECT * ' +
+                'FROM studentenhuis WHERE ID=' + houseId + ' ' +
+                'AND ADRES = \'' + adress + '\' ' +
+                'AND Naam = \'' + name + '\''
+            console.log(useridquery)
+            db.query(useridquery,
+                (error, rows, fields) => {
+                    if (error) {
+                        res.status(500).json(error.toString())
+                    } else {
+                        olduserid = rows[0].UserID;
+                        console.log("oorspronkelijke userid: " + olduserid);
+                    }
+                })
+        }catch (e) {
+
+        }
+        const updatequery = 'DELETE studentenhuis SET `Naam` = \''+name+'\', `Adres` = \''+adress+'\' WHERE `UserID`= \''+ id +'\' AND `ID` = \''+houseId+'\''
+
+        console.log(updatequery) ;
+        db.query(updatequery,
+            (error, rows, fields) => {
+                if (error) {
+                    res.status(500).json(error.toString())
+                }
+                else if(olduserid !== id){
+                    res.json({message:"niet geautoriseerd."})
+                }else {
+                    res.json({message: 'Studentenhuis geupdate.'})
+                }
+
+            })
+
+
+
+
+
     });
 
 function isEmpty(str) {
