@@ -10,8 +10,8 @@ class Studentenhuis{
             assert(typeof (address) === 'string', 'address must be a string')
             assert(typeof(id) === 'string', 'id must be a string')
 
-            assert(firstname.trim().length > 0, 'name must be at least 1 characters')
-            assert(lastname.trim().length > 0, 'address must be at least 1 characters')
+            assert(name.trim().length > 0, 'name must be at least 1 character')
+            assert(address.trim().length > 0, 'address must be at least 1 character')
             assert(id.trim().length > 0, 'id must be a least 1 character')
 
         }
@@ -19,7 +19,7 @@ class Studentenhuis{
             throw(new ApiError(ex.toString(), 422))
     }
 
-        this.name = {
+        this.info = {
             name: name.trim(),
             address: address.trim(),
             id: id.trim()
@@ -27,12 +27,12 @@ class Studentenhuis{
     }
 
     getName(){
-        return this.name.name;
+        return this.info.name;
     }
     getAdress(){
-        return this.name.address;
+        return this.info.address;
     }
     getId(){
-        return this.name.id;
+        return this.info.id;
     }
 }
