@@ -2,38 +2,35 @@ const express = require('express');
 const users = require('../modules/user_ds');
 const router = express.Router();
 const db = require('../db/connector');
-const auth =  require('../auth/authentication');
-const jwt = require('jwt-simple')
-const settings = require('../config')
+const auth = require('../auth/authentication');
+const jwt = require('jwt-simple');
+const settings = require('../config');
 
-function getid(req){
+function getid(req) {
     var token = (req.header('X-Access-Token')) || '';
-
-    const payload = jwt.decode(token, settings.secretkey)
+    const payload = jwt.decode(token, settings.secretkey);
     const id = payload.sub;
     return id;
 }
-
-function getUserIdByHouseId(houseid){
-        const useridquery = 'SELECT * ' +
-            'FROM studentenhuis WHERE ID=' + houseid;
-        console.log(useridquery)
-        db.query(useridquery,
-            function(error, rows, fields){
-                if (error) {
-                    console.log("error met het ophalen van id met house nummer")
-                } else {
-                    console.log('eerste delete query')
-                    console.log(rows[0])
-                    return rows[0].UserID;
-                    console.log("oorspronkelijke userid: " + olduserid);
-                }
-            })
-
+function getUserIdByHouseId(houseid) {
+    const useridquery = 'SELECT * ' +
+        'FROM studentenhuis WHERE ID=' + houseid;
+    console.log(useridquery);
+    db.query(useridquery,
+        function(error, rows, fields) {
+            if (error) {
+                console.log("error met het ophalen van id met house nummer")
+            } else {
+                console.log('eerste delete query');
+                console.log(rows[0]);
+                return rows[0].UserID;
+                console.log("oorspronkelijke userid: " + olduserid);
+            }
+        })
 }
 
 module.exports = {
-    getHousesById(req,res,next)  {
+    getHousesById(req, res, next) {
 
         const id = req.params.id || '';
 
@@ -61,7 +58,6 @@ module.exports = {
                 })
         }
     },
-
     addHouse(req, res) {
 
         var name = req.body.naam || '';
@@ -69,7 +65,7 @@ module.exports = {
         var id = getid(req) || '';
 
         const postquery = 'INSERT INTO `studentenhuis` (`Naam`,`Adres`,`UserID`)\n' +
-            'VALUES(\''+ name +'\',\''+adress +'\',' + id + ')'
+            'VALUES(\'' + name + '\',\'' + adress + '\',' + id + ')'
         console.log(postquery);
 
         db.query(postquery,
@@ -77,20 +73,20 @@ module.exports = {
                 if (error) {
                     res.status(500).json(error.toString())
                 } else {
-                    res.json({message: 'Studentenhuis toegevoegd.'})
+                    res.json({
+                        message: 'Studentenhuis toegevoegd.'
+                    })
                 }
             })
     },
-    updateHouse (req, res) {
+    updateHouse(req, res) {
         var name = req.body.naam || '';
         var adress = req.body.adres || '';
         var houseId = req.params.id;
-        var id = getid(req)|| '';
+        var id = getid(req) || '';
         var olduserid;
 
         try {
-
-
             const useridquery = 'SELECT * ' +
                 'FROM studentenhuis WHERE ID=' + houseId + ' AND ADRES = \'' + adress + '\' AND Naam = \'' + name + '\''
             console.log(useridquery)
@@ -104,27 +100,30 @@ module.exports = {
                         console.log("oorspronkelijke userid: " + olduserid);
                     }
                 })
-        }catch (e) {
-
+        } catch (e) {
+            console.log(e);
         }
 
-        const updatequery = 'UPDATE studentenhuis SET `Naam` = \''+name+'\', `Adres` = \''+adress+'\' WHERE `UserID`= '+ id +' AND `ID` = '+houseId+'';
+        const updatequery = 'UPDATE studentenhuis SET `Naam` = \'' + name + '\', `Adres` = \'' + adress + '\' WHERE `UserID`= ' + id + ' AND `ID` = ' + houseId + '';
 
-        console.log(updatequery) ;
+        console.log(updatequery);
         db.query(updatequery,
             (error, rows, fields) => {
                 if (error) {
                     res.status(500).json(error.toString())
-                }
-                else if(olduserid !== id){
-                    res.json({message:"niet geautoriseerd."})
-                }else {
-                    res.json({message: 'Studentenhuis geupdate.'})
+                } else if (olduserid !== id) {
+                    res.json({
+                        message: "niet geautoriseerd."
+                    })
+                } else {
+                    res.json({
+                        message: 'Studentenhuis geupdate.'
+                    })
                 }
 
             })
     },
-    deleteHouse(req,res) {
+    deleteHouse(req, res) {
         var houseId = req.params.id;
         var idFromToken = getid(req) || '';
         var idFromCreator;
@@ -138,7 +137,9 @@ module.exports = {
                     if (error) {
                         res.status(500).json(error.toString())
                     } else if (rows.length === 0 || rows.size === 0) {
-                        res.json({message: "Er is geen studentenhuis met het meegegeven id gevonden!"})
+                        res.json({
+                            message: "Er is geen studentenhuis met het meegegeven id gevonden!"
+                        })
                         houseFound = false;
                     } else {
                         idFromCreator = rows[0].UserID;
@@ -151,11 +152,14 @@ module.exports = {
                             (error, rows, fields) => {
                                 if (error) {
                                     res.status(500).json(error.toString())
-                                }
-                                else if (idFromCreator !== idFromToken) {
-                                    res.json({message: "niet geautoriseerd."})
+                                } else if (idFromCreator !== idFromToken) {
+                                    res.json({
+                                        message: "niet geautoriseerd."
+                                    })
                                 } else {
-                                    res.json({message: 'Studentenhuis gedelete.'})
+                                    res.json({
+                                        message: 'Studentenhuis gedelete.'
+                                    })
                                 }
 
                             })

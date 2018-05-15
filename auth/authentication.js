@@ -10,23 +10,23 @@ const jwt = require('jwt-simple')
 // Encode (from username to token)
 //
 function encodeToken(userid) {
-    console.log("encoding token....");
+    console.log("Creating token");
     const playload = {
         sub: userid   // or any object you choose!
     }
-    console.log("encoded token");
+    console.log("New token generated with ID " + userid);
     return jwt.encode(playload, settings.secretkey)
 
 }
 
 function decodeToken(token, callback) {
-    console.log("decoding token....");
+    console.log("Token found");
+
     try {
         const payload = jwt.decode(token, settings.secretkey)
-        console.log(payload)
         const now = moment().unix();
         const id = payload.sub;
-        console.log(id);
+        console.log("ID: " + id + " is making a request, id obtained from token");
         if (now > payload.exp) {
             callback('Token has expired!', null)
         } else {
@@ -35,7 +35,7 @@ function decodeToken(token, callback) {
     } catch (err) {
         callback(err, null)
     }
-    console.log("decoded token")
+
 }
 
 module.exports = {
