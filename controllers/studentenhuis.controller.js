@@ -124,5 +124,45 @@ module.exports = {
 
             })
     },
+    deleteHouse(req,res) {
+        var houseId = req.params.id;
+        var idFromToken = getid(req) || '';
+        var idFromCreator;
+        var houseFound = true;
+        try {
+            const useridquery = 'SELECT * ' +
+                'FROM studentenhuis WHERE ID=' + houseId
+            console.log(useridquery)
+            db.query(useridquery,
+                (error, rows, fields) => {
+                    if (error) {
+                        res.status(500).json(error.toString())
+                    } else if (rows.length === 0 || rows.size === 0) {
+                        res.json({message: "Er is geen studentenhuis met het meegegeven id gevonden!"})
+                        houseFound = false;
+                    } else {
+                        idFromCreator = rows[0].UserID;
+                        console.log("oorspronkelijke userid: " + idFromCreator);
 
+                        const deletequery = 'DELETE FROM studentenhuis WHERE `UserID`= ' + idFromToken + ' AND `ID` = ' + houseId
+
+                        console.log(deletequery);
+                        db.query(deletequery,
+                            (error, rows, fields) => {
+                                if (error) {
+                                    res.status(500).json(error.toString())
+                                }
+                                else if (idFromCreator !== idFromToken) {
+                                    res.json({message: "niet geautoriseerd."})
+                                } else {
+                                    res.json({message: 'Studentenhuis gedelete.'})
+                                }
+
+                            })
+                    }
+                })
+        } catch (e) {
+            console.log(e);
+        }
+    }
 };
