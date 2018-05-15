@@ -7,6 +7,11 @@ const server = require('../server')
 
 const User = require('../modules/')
 
+//All info needed for tests
+//Token
+const tokenEncoded = require('../auth/authentication').encodeToken
+const tokenDecoded = require('../auth/authentication').decodeToken
+
 chai.should()
 chai.use(chaiHttp)
 
@@ -14,11 +19,33 @@ chai.use(chaiHttp)
 // for usage in other testcases that require login.
 let validToken
 
+//JWT token testing from Diederich
+describe('V1 Roommate', () => {
+    var token = null;
+
+    before(function(done) {
+        chai.request(server)
+            .post('../routes/apiv4')
+            .send(
+                {
+                    "email": "testcase@test.com",
+                    "password":"secret"
+                })
+            .end(function(err, res) {
+                token = res.body.token; 
+                done();
+            });
+    });
+
+})
+
+
 describe('Registration', () => {
     it('should return a token when providing valid information', (done) => {
         //
         // Hier schrijf je jouw testcase.
         //
+
 
         // Tip: deze test levert een token op. Dat token gebruik je in 
         // andere testcases voor beveiligde routes door het hier te exporteren
