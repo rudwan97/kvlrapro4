@@ -191,6 +191,6 @@ module.exports = {
         }else {
             res.status(412).json({message: "Een of meer properties in de request body ontbreken of zijn foutief"})
         }
-        }
+    }
 
 }

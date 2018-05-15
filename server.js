@@ -20,7 +20,9 @@ app.all('*', (request, respons)=>{
 });
 //
 
-var port = 8080;
+var port = 5000;
 app.listen(port, () =>{
     console.log("server is starting");
 });
+
+module.exports = app;
