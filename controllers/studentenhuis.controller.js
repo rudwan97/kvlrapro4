@@ -12,22 +12,6 @@ function getid(req) {
     const id = payload.sub;
     return id;
 }
-function getUserIdByHouseId(houseid) {
-    const useridquery = 'SELECT * ' +
-        'FROM studentenhuis WHERE ID=' + houseid;
-    console.log(useridquery);
-    db.query(useridquery,
-        function(error, rows, fields) {
-            if (error) {
-                console.log("error met het ophalen van id met house nummer")
-            } else {
-                console.log('eerste delete query');
-                console.log(rows[0]);
-                return rows[0].UserID;
-                console.log("oorspronkelijke userid: " + olduserid);
-            }
-        })
-}
 
 module.exports = {
     getHousesById(req, res, next) {

@@ -110,6 +110,7 @@ router.get('/studentenhuis/:id?', housecontroller.getHousesById);
 router.delete('/studentenhuis/:id', housecontroller.deleteHouse);
 
 router.post('/studentenhuis/:id/maaltijd', mealcontroller.addMeal)
+router.delete('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.deleteMeal);
 //
 //TODO: Zorgen dat als er meerdere zijn de code ook werkt
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?', (req, res, next) => {
