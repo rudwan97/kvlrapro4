@@ -6,6 +6,7 @@ const auth =  require('../auth/authentication');
 const settings = require('../config')
 const moment = require('moment')
 const jwt = require('jwt-simple')
+const housecontroller = require('../controllers/studentenhuis.controller');
 
 let payloadid;
 
@@ -36,7 +37,6 @@ function getid(req){
 
 // TODO: Zorgen dat er niet ingelogd kan worden met lege waarden
 router.route('/login')
-
     .post( function(req, res) {
 
         console.log("login request..");
@@ -92,7 +92,7 @@ router.route('/register')
 
         const insertQuery = 'INSERT INTO `user` ' +
             '(`Voornaam`, `Achternaam`, `Email`, `Password`)' +
-            'VALUES (\'' + firstname + '\', \'' + lastname + '\', \'' + mail + '\', \'' + password + '\');';
+            ' VALUES (\'' + firstname + '\', \'' + lastname + '\', \'' + mail + '\', \'' + password + '\');';
 
         console.log("inserting sqlquery...");
         console.log(insertQuery);
@@ -116,34 +116,14 @@ router.route('/register')
 
     });
 
-router.get('/studentenhuis/:id?', (req,res,next) => {
-
-    console.log("ID MET COOLE FUNCTIE" + getid(req));
-    const id = req.params.id || '';
-
-    if (id == '') {
-        db.query('SELECT * ' +
-            'FROM studentenhuis',
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else {
-                    res.status(200).json(rows)
-                }
-            })
-    } else {
-        db.query('SELECT * ' +
-            'FROM `studentenhuis`' +
-            ' WHERE `ID` = ' + id,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else {
-                    res.status(200).json(rows)
-                }
-            })
-    }
-});
+//TODO: Zorgen dat er niet gepost kan worden met lege bodys
+//TODO: Correcte fout afhandeling
+router.post('/studentenhuis', housecontroller.addHouse);
+router.put('/studentenhuis/:id',housecontroller.updateHouse);
+router.get('/studentenhuis/:id?',housecontroller.getHousesById);
+//router.delete('/studentenhuis/:id',housecontroller.deleteHouse);
+//
+//TODO: Zorgen dat als er meerdere zijn de code ook werkt
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?', (req,res,next) => {
 
     const meal = req.params.maaltijd || '';
@@ -211,73 +191,6 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req,res,next) =>
         })
 });
 
-//TODO: Zorgen dat er niet gepost kan worden met lege bodys
-//TODO: Correcte fout afhandeling
-router.route('/studentenhuis')
-
-    .post( function(req, res) {
-
-        var name = req.body.naam || '';
-        var adress = req.body.adres || '';
-        var id = payloadid || '';
-
-        const postquery = 'INSERT INTO `studentenhuis` (`Naam`,`Adres`,`UserID`)\n' +
-            'VALUES(\''+ name +'\',\''+adress +'\',' + id + ')'
-        console.log(postquery);
-
-        db.query(postquery,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else {
-                    res.json({message: 'Studentenhuis toegevoegd.'})
-                }
-            })
-    });
-
-router.route('/studentenhuis/:id')
-    .put(function (req, res) {
-        var name = req.body.naam || '';
-        var adress = req.body.adres || '';
-        var houseId = req.params.id;
-        var id = payloadid || '';
-        var olduserid;
-
-        try {
-
-        
-        const useridquery = 'SELECT * ' +
-            'FROM studentenhuis WHERE ID=' + houseId + ' AND ADRES = \'' + adress + '\' AND Naam = \'' + name + '\''
-        console.log(useridquery)
-        db.query(useridquery,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else {
-                    olduserid = rows[0].UserID;
-                    console.log("oorspronkelijke userid: " + olduserid);
-                }
-            })
-    }catch (e) {
-            
-        }
-
-        const updatequery = 'UPDATE studentenhuis SET `Naam` = \''+name+'\', `Adres` = \''+adress+'\' WHERE `UserID`= \''+ id +'\' AND `ID` = \''+houseId+'\''
-
-        console.log(updatequery) ;
-        db.query(updatequery,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                }
-                else if(olduserid !== id){
-                    res.json({message:"niet geautoriseerd."})
-                }else {
-                    res.json({message: 'Studentenhuis geupdate.'})
-                }
-
-            })
-    });
 
 router.route('/studentenhuis/:id')
     .delete(function (req,res) {
@@ -289,9 +202,7 @@ router.route('/studentenhuis/:id')
         var olduserid;
         try {
             const useridquery = 'SELECT * ' +
-                'FROM studentenhuis WHERE ID=' + houseId + ' ' +
-                'AND ADRES = \'' + adress + '\' ' +
-                'AND Naam = \'' + name + '\''
+                'FROM studentenhuis WHERE ID=' + houseId
             console.log(useridquery)
             db.query(useridquery,
                 (error, rows, fields) => {
@@ -320,7 +231,7 @@ router.route('/studentenhuis/:id')
                 }
 
             })
-    });
+   });
 
 function isEmpty(str) {
     return (!str || 0 === str.length);
