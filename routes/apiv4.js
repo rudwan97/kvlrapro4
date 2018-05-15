@@ -10,7 +10,7 @@ const housecontroller = require('../controllers/studentenhuis.controller');
 const mealcontroller = require('../controllers/meal.controller');
 
 router.all(new RegExp("[^(/login|register)]"), function(req, res, next) {
-    console.log("VALIDATE TOKEN")
+    console.log("////////////VALIDATING TOKEN////////////");
     var token = (req.header('X-Access-Token')) || '';
     auth.decodeToken(token, (err, payload) => {
         if (err) {

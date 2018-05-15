@@ -26,7 +26,7 @@ function decodeToken(token, callback) {
         const payload = jwt.decode(token, settings.secretkey)
         const now = moment().unix();
         const id = payload.sub;
-        console.log("ID: " + id + " is making a request, id obtained from token");
+        console.log("ID: " + id + " obtained from token, acces granted");
         if (now > payload.exp) {
             callback('Token has expired!', null)
         } else {

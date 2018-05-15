@@ -61,74 +61,45 @@ function getCreatorOfHouse(houseId){
 }
 module.exports = {
     addMeal(req, res) {
+        console.log("////////////NEW REQUEST////////////")
         console.log("ID: " + getid(req) + " is making a post request!");
-        var houseId = req.params.id;
-        var houseExists = false;
-        var creatorId;
+        var requestId = getid(req);
         var name = req.body.naam || '';
         var description = req.body.beschrijving || '';
-        var ingredients = req.body.ingredienten
-        var allergic = req.body.allergie
-        var price = req.body.prijs
-        var userIdFromToken = getid(req) || '';
-
-        // creatorId = getCreatorOfHouse(houseId);
-        // houseExists = getStudentHouseFromId(houseId);
-
-        const getQuery = 'SELECT * FROM studentenhuis WHERE `ID` = ' + houseId;
-        console.log(getQuery);
-        db.query(getQuery, (error,rows,fields) =>{
-            if (error) {
-                console.log("Error bij het ophalen van id uit studentenhuis bij getmeal")
-            }else if (rows.size === 0){
-                console.log("Geen huis gevonden door het gethousebyid functie")
-            } else {
-                console.log("studenthuis gevonden")
-                houseExists = true;
-            }
-        })
-
-        const getQuery2 = 'SELECT * FROM studentenhuis WHERE `ID` = ' + houseId;
-        console.log(getQuery2);
-        db.query(getQuery2, (error,rows,fields) =>{
-            if (error) {
-                console.log("Error bij het ophalen van userid uit studentenhuis bij getmeal")
-            }else if (rows.size === 0){
-                console.log("Geen userid gevonden door het gethousebyid functie")
-            } else {
-                console.log("userid gevonden")
-                console.log(rows[0].UserID);
-               creatorId = rows[0].UserID;
-            } 
-
-        })
+        var ingredients = req.body.ingredienten || '';
+        var allergy = req.body.allergie || '';
+        let price = Number(req.body.prijs || '');
+        var houseId = req.params.id;
 
 
-        const postquery = "INSERT " +
-            "INTO `maaltijd` (`Naam`,`Beschrijving`," +
-            "`Ingredienten`,`Allergie`,`Prijs`,`UserID`,`StudentenhuisID`) " +
-            "VALUES (\'" + name + "\',\'" + ingredients+ "\',\'"+description+"\'," +
-            "\'"+allergic+"\',"+price+","+4+","+houseId + ")";
-        console.log(postquery);
+        const getHouse = 'SELECT * FROM studentenhuis WHERE `ID` = ' + houseId;
 
-        db.query(postquery,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else {
-                    res.json({
-                        message: 'Maaltijd toegevoegd.'
+        db.query(getHouse,(error,creatorResult)=> {
+            console.log("Er is " + creatorResult.length + " huis gevonden met het meegegeven id")
+        if (creatorResult.length !==0) {
+            if (creatorResult[0].ID == houseId) {
+                console.log("Het huis met de meegegeven id is gevonden! ID ="+creatorResult[0].ID);
+                db.query('INSERT INTO maaltijd (`Naam`, `Beschrijving`, `Ingredienten`, `Allergie`, `Prijs`, `UserID`, `StudentenhuisID`) VALUES (?,?,?,?,?,?,?)',
+                    [name, description, ingredients, allergy, price, requestId, houseId],
+                    (errorMeals, resultMeals) => {
+
+                        if (error) {
+                            console.log(error)
+                            res.status(500).json({"error": "An error occured while fetching the data"})
+                        }
+                        else {
+                            res.status(200).json({"message": "De maaltijd is succesvol toegevoegd!"});
+                            console.log("Actie succesvol")
+                        }
                     })
-                }
-            })
-
-        console.log("De id van de creator van het gekozen houseId"+ creatorId);
-        console.log(houseExists);
-
-        // if (houseExists){
-        //
-        // } else{
-        //     res.json("Geen huis gevonden bij het meegegeven id")
-        // }
+            } else {
+                res.json("Bestaat niet")
+            }
+        }else {
+            res.status(500).json({error:"Er bestaat geen huis met het meegegeven id"})
+            console.log("Huis niet gevonden")
+        }
+        })
     }
+
 }
