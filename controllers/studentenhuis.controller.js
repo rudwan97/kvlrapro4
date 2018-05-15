@@ -31,7 +31,7 @@ function getUserIdByHouseId(houseid) {
 
 module.exports = {
     getHousesById(req, res, next) {
-
+        console.log("ID: " + getid(req) + " is making a getHouse request!");
         const id = req.params.id || '';
 
 
@@ -59,7 +59,7 @@ module.exports = {
         }
     },
     addHouse(req, res) {
-
+        console.log("ID: " + getid(req) + " is making a get request!");
         var name = req.body.naam || '';
         var adress = req.body.adres || '';
         var id = getid(req) || '';
@@ -80,6 +80,7 @@ module.exports = {
             })
     },
     updateHouse(req, res) {
+        console.log("ID: " + getid(req) + " is making a update request!");
         var name = req.body.naam || '';
         var adress = req.body.adres || '';
         var houseId = req.params.id;
@@ -88,42 +89,46 @@ module.exports = {
 
         try {
             const useridquery = 'SELECT * ' +
-                'FROM studentenhuis WHERE ID=' + houseId + ' AND ADRES = \'' + adress + '\' AND Naam = \'' + name + '\''
+                'FROM studentenhuis WHERE ID=' + houseId;
             console.log(useridquery)
             db.query(useridquery,
                 (error, rows, fields) => {
                     if (error) {
                         res.status(500).json(error.toString())
+                    } if (rows.size === 0) {
+                        console.log("huis niet gevonden")
+
                     } else {
                         console.log(olduserid = rows[0].UserID);
                         olduserid = rows[0].UserID;
                         console.log("oorspronkelijke userid: " + olduserid);
+
+                        const updatequery = 'UPDATE studentenhuis SET `Naam` = \'' + name + '\', `Adres` = \'' + adress + '\' WHERE `UserID`= ' + id + ' AND `ID` = ' + houseId + '';
+
+                        console.log(updatequery);
+                        db.query(updatequery,
+                            (error, rows, fields) => {
+                                if (error) {
+                                    res.status(500).json(error.toString())
+                                } else if (olduserid !== id) {
+                                    res.json({
+                                        message: "niet geautoriseerd."
+                                    })
+                                } else {
+                                    res.json({
+                                        message: 'Studentenhuis geupdate.'
+                                    })
+                                }
+
+                            })
                     }
                 })
         } catch (e) {
             console.log(e);
         }
-
-        const updatequery = 'UPDATE studentenhuis SET `Naam` = \'' + name + '\', `Adres` = \'' + adress + '\' WHERE `UserID`= ' + id + ' AND `ID` = ' + houseId + '';
-
-        console.log(updatequery);
-        db.query(updatequery,
-            (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                } else if (olduserid !== id) {
-                    res.json({
-                        message: "niet geautoriseerd."
-                    })
-                } else {
-                    res.json({
-                        message: 'Studentenhuis geupdate.'
-                    })
-                }
-
-            })
     },
     deleteHouse(req, res) {
+        console.log("ID: " + getid(req) + " is making a Delete request!");
         var houseId = req.params.id;
         var idFromToken = getid(req) || '';
         var idFromCreator;

@@ -7,6 +7,7 @@ const settings = require('../config')
 const moment = require('moment')
 const jwt = require('jwt-simple')
 const housecontroller = require('../controllers/studentenhuis.controller');
+const mealcontroller = require('../controllers/meal.controller');
 
 router.all(new RegExp("[^(/login|register)]"), function(req, res, next) {
     console.log("VALIDATE TOKEN")
@@ -107,6 +108,8 @@ router.post('/studentenhuis', housecontroller.addHouse);
 router.put('/studentenhuis/:id', housecontroller.updateHouse);
 router.get('/studentenhuis/:id?', housecontroller.getHousesById);
 router.delete('/studentenhuis/:id', housecontroller.deleteHouse);
+
+router.post('/studentenhuis/:id/maaltijd', mealcontroller.addMeal)
 //
 //TODO: Zorgen dat als er meerdere zijn de code ook werkt
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?', (req, res, next) => {
