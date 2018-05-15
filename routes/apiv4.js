@@ -30,7 +30,6 @@ function getid(req) {
     const id = payload.sub;
     return id;
 }
-// TODO: Zorgen dat er niet ingelogd kan worden met lege waarden
 router.route('/login')
     .post(function(req, res) {
         console.log("login request..");
@@ -68,8 +67,6 @@ router.route('/login')
             }
         });
     });
-
-// TODO: Zorgen dat er niet geregistreerd kan worden met lege waarden
 router.route('/register')
     .post(function(req, res) {
         console.log("attempting to register...");
@@ -111,37 +108,12 @@ router.delete('/studentenhuis/:id', housecontroller.deleteHouse);
 
 router.post('/studentenhuis/:id/maaltijd', mealcontroller.addMeal)
 router.delete('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.deleteMeal);
-//
 //TODO: Zorgen dat als er meerdere zijn de code ook werkt
-router.get('/studentenhuis/:id/maaltijd/:maaltijd?', (req, res, next) => {
-    const meal = req.params.maaltijd || '';
-    const id = req.params.id || '';
-    if (meal == '') {
-        db.query('SELECT * ' +
-            'FROM `maaltijd` ' +
-            'WHERE `StudentenhuisID` = ' + id, (error, rows, fields) => {
-            if (error) {
-                res.status(500).json(error.toString())
-            } else {
-                res.status(200).json(rows)
-            }
-        })
-    } else {
-        console.log('SELECT * ' +
-            'FROM `maaltijd` ' +
-            'WHERE `StudentenhuisID` = ' + id +
-            ' AND `ID` = ' + meal);
-        db.query('SELECT * FROM `maaltijd` ' +
-            'WHERE `StudentenhuisID` = ' + id +
-            ' AND `ID` = ' + meal, (error, rows, fields) => {
-            if (error) {
-                res.status(500).json(error.toString())
-            } else {
-                res.status(200).json(rows)
-            }
-        })
-    }
-});
+router.get('/studentenhuis/:id/maaltijd/:maaltijd?',mealcontroller.getMeal);
+router.put('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.putMeal)
+
+
+
 router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req, res, next) => {
     const meal = req.params.maaltijd || '';
     const id = req.params.id || '';
@@ -172,47 +144,6 @@ router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req, res, next) 
         }
     })
 });
-//Oude delete functie, als backup
-// router.route('/studentenhuis/:id')
-//     .delete(function (req,res) {
-//
-//         var name = req.body.naam || '';
-//         var adress = req.body.adres || '';
-//         var houseId = req.params.id;
-//         var id = payloadid || '';
-//         var olduserid;
-//         try {
-//             const useridquery = 'SELECT * ' +
-//                 'FROM studentenhuis WHERE ID=' + houseId
-//             console.log(useridquery)
-//             db.query(useridquery,
-//                 (error, rows, fields) => {
-//                     if (error) {
-//                         res.status(500).json(error.toString())
-//                     } else {
-//                         olduserid = rows[0].UserID;
-//                         console.log("oorspronkelijke userid: " + olduserid);
-//                     }
-//                 })
-//         }catch (e) {
-//
-//         }
-//         const deletequery = 'DELETE FROM studentenhuis WHERE `UserID`= '+ id +' AND `ID` = '+houseId
-//
-//         console.log(deletequery) ;
-//         db.query(deletequery,
-//             (error, rows, fields) => {
-//                 if (error) {
-//                     res.status(500).json(error.toString())
-//                 }
-//                 else if(olduserid !== id){
-//                     res.json({message:"niet geautoriseerd."})
-//                 }else {
-//                     res.json({message: 'Studentenhuis gedelete.'})
-//                 }
-//
-//             })
-//    });
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
