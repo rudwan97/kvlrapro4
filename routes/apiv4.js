@@ -3,6 +3,9 @@ const users = require('../modules/user_ds');
 const router = express.Router();
 const db = require('../db/connector');
 const auth =  require('../auth/authentication');
+const settings = require('../config')
+const moment = require('moment')
+const jwt = require('jwt-simple')
 
 let payloadid;
 
@@ -22,6 +25,14 @@ router.all( new RegExp("[^(/login|register)]"), function (req, res, next) {
         }
     });
 });
+
+function getid(req){
+    var token = (req.header('X-Access-Token')) || '';
+
+    const payload = jwt.decode(token, settings.secretkey)
+    const id = payload.sub;
+    return id;
+}
 
 // TODO: Zorgen dat er niet ingelogd kan worden met lege waarden
 router.route('/login')
@@ -70,15 +81,14 @@ router.route('/login')
 
 // TODO: Zorgen dat er niet geregistreerd kan worden met lege waarden
 router.route('/register')
-
     .post( function(req, res) {
 
         console.log("attempting to register...");
+
         var firstname = req.body.firstname
         var lastname = req.body.lastname
         var mail = req.body.mail
         var password = req.body.password
-
 
         const insertQuery = 'INSERT INTO `user` ' +
             '(`Voornaam`, `Achternaam`, `Email`, `Password`)' +
@@ -92,20 +102,23 @@ router.route('/register')
                 (error, rows, fields) => {
                     if (error) {
                         res.status(500).json(error.toString())
+                        console.log("Registreren gestopt");
                     }
                     else {
-                        res.status(200).json({message: "register succesfull, login to obtain api key"})
+                        res.status(200).json({message: "Register succesfull, /login with mail and password to obtain api key"})
                         console.log("account aangemaakt")
                     }
                 });
         }else{
-            res.status(500).json("Een van de velden is leeg");
+            res.status(500).json({'error': "One or more fields are empty"});
+            console.log("Registreren gestopt");
         }
 
     });
 
 router.get('/studentenhuis/:id?', (req,res,next) => {
 
+    console.log("ID MET COOLE FUNCTIE" + getid(req));
     const id = req.params.id || '';
 
     if (id == '') {
@@ -132,6 +145,7 @@ router.get('/studentenhuis/:id?', (req,res,next) => {
     }
 });
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?', (req,res,next) => {
+
     const meal = req.params.maaltijd || '';
     const id = req.params.id || '';
     if (meal == '') {
