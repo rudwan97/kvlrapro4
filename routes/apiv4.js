@@ -32,16 +32,17 @@ function getid(req) {
 }
 router.route('/login')
     .post(function(req, res) {
-        console.log("login request..");
+        console.log("////////////NEW REQUEST////////////");
+        console.log("trying to login..")
         var mail = req.body.mail || '';
         var password = req.body.password || '';
         let resultfromquery = [];
         let id;
         let email;
         let pass;
-        console.log("checking if user exists..")
+        console.log("checking if user exists")
         const query = 'SELECT `ID`, `Email`,`Password` FROM `user` WHERE `Email` =\'' + mail + '\' AND `Password` = \'' + password + '\'';
-        console.log("executing query...")
+        console.log("executing query")
         console.log(query);
         db.query(query, (error, rows, fields) => {
             if (error) {
@@ -69,6 +70,7 @@ router.route('/login')
     });
 router.route('/register')
     .post(function(req, res) {
+        console.log("////////////NEW REQUEST////////////")
         console.log("attempting to register...");
         var firstname = req.body.firstname
         var lastname = req.body.lastname
@@ -99,8 +101,6 @@ router.route('/register')
         }
     });
 
-//TODO: Zorgen dat er niet gepost kan worden met lege bodys
-//TODO: Correcte fout afhandeling
 router.post('/studentenhuis', housecontroller.addHouse);
 router.put('/studentenhuis/:id', housecontroller.updateHouse);
 router.get('/studentenhuis/:id?', housecontroller.getHousesById);
@@ -108,7 +108,6 @@ router.delete('/studentenhuis/:id', housecontroller.deleteHouse);
 
 router.post('/studentenhuis/:id/maaltijd', mealcontroller.addMeal)
 router.delete('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.deleteMeal);
-//TODO: Zorgen dat als er meerdere zijn de code ook werkt
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?',mealcontroller.getMeal);
 router.put('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.putMeal)
 
