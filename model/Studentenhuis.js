@@ -10,8 +10,8 @@ class Studentenhuis{
             assert(typeof (address) === 'string', 'address must be a string')
             assert(typeof(id) === 'string', 'id must be a string')
 
-            assert(name.trim().length > 0, 'name must be at least 1 characters')
-            assert(address.trim().length > 0, 'address must be at least 1 characters')
+            assert(name.trim().length > 0, 'name must be at least 1 character')
+            assert(address.trim().length > 0, 'address must be at least 1 character')
             assert(id.trim().length > 0, 'id must be a least 1 character')
 
         }
