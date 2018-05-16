@@ -3,13 +3,6 @@ var bodyParser 	= require('body-parser');
 
 const app = express();
 
-app.get('/api/hello', (request, res, next) =>{
-    console.log(request.url);
-    res.status(500);
-    res.json("Hello");
-    console.log("gelukt");
-    next();
-});
 
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
@@ -22,7 +15,7 @@ app.all('*', (request, respons)=>{
 
 var port = process.env.PORT || 8080;
 app.listen(port, () =>{
-    console.log("server is starting");
+    console.log("Server listening to port: " + port);
 });
 
 module.exports = app;

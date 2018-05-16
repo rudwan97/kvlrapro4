@@ -146,23 +146,9 @@ describe('Studentenhuis API PUT', () => {
           });
     });
 
-    it('should return a studentenhuis with ID when posting a valid object', (done) => {
-        chai.request(server)
-            .put('/apiv4/studentenhuis')
-            .set('x-access-token', token)
-            .send({
-                'naam': 'vin',
-                'adres': 'ke'
-            })
-        .end(function(err,res){
-            res.should.have.status(200)
-            done();
-        });
-    });
-
     it('should throw an error when naam is missing', (done) => {
         chai.request(server)
-            .put('/apiv4/studentenhuis')
+            .put('/apiv4/studentenhuis/1')
             .set('x-access-token', token)
             .send({
                 'invalid': 'qwerty',
@@ -177,7 +163,7 @@ describe('Studentenhuis API PUT', () => {
     it('should throw an error when adres is missing', (done) => {
 
         chai.request(server)
-            .put('/apiv4/studentenhuis')
+            .put('/apiv4/studentenhuis/1')
             .set('x-access-token', token)
             .send({
                 'naam': 'Coole naam',

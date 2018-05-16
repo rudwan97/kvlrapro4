@@ -1,13 +1,7 @@
 const db = require('../db/connector');
-const jwt = require('jwt-simple');
-const settings = require('../config');
 const auth = require('../auth/authentication');
 
-function getid(req) {
-    var token = (req.header('X-Access-Token')) || '';
-    const payload = jwt.decode(token, settings.secretkey);
-    return payload.sub;
-}
+
 module.exports = {
     login(req, res) {
         console.log("////////////LOGIN REQUEST////////////");

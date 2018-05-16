@@ -5,7 +5,7 @@ const jwt = require('jwt-simple')
 function encodeToken(userid) {
     console.log("Creating token");
     const playload = {
-        sub: userid   // or any object you choose!
+        sub: userid
     }
     console.log("New token generated with ID " + userid);
     return jwt.encode(playload, settings.secretkey)
