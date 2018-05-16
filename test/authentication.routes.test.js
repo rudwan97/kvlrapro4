@@ -12,7 +12,7 @@ describe('V1 Roommate', () => {
 
     before(function(done) {
         chai.request(server)
-            .post('../routes/apiv4')
+            .get('/studentenhuis')
             .send(
                 {
                     "email": "testcase@test.com",
@@ -52,7 +52,7 @@ describe('Registration', () => {
     })
 
     it('should throw an error when the user already exists', (done) => {
-        assert.throws(() => new user  )
+      //  assert.throws(() => new user  )
         //
         // Hier schrijf je jouw testcase.
         //
@@ -123,6 +123,17 @@ describe('Login', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('')
+            .send(
+                {
+                    "email": "testcase@test.com",
+                    "password":"secret"
+                })
+            .end(function(err, res) {
+                token = res.body.token;
+                done();
+            });
         done()
     })
 

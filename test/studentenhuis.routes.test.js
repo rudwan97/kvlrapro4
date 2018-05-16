@@ -20,24 +20,43 @@ describe('Studentenhuis API POST', () => {
         done()
     })
 
-    it('should throw an error when naam is missing', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
-        done()
-    })
+    it('should return a studentenhuis when posting a valid object', (done) => {
+        const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjR9.3Ct8wyd-7Ya0fEBzVXuAtHp2iwKqAfQPFBoLsDW-1yY"
+        chai.request(server)
+            .post('/apiv4/studentenhuis')
+            .set('x-access-token', token)
+            .send({
+                'unvalid': 'Avans',
+                'adres': 'Hoogeschoollaan, Breda'
+            })
+            .end(function (err, res) {
+                res.should.have.status(412);
+                done();
+            });
+    });
 
     it('should throw an error when adres is missing', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
-        done()
+        const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjR9.3Ct8wyd-7Ya0fEBzVXuAtHp2iwKqAfQPFBoLsDW-1yY"
+        chai.request(server)
+            .post('/apiv4/studentenhuis')
+            .set('x-access-token', token)
+            .send({
+                'name': 'Avans',
+                'unvalid': 'Hoogeschoollaan, Breda'
+            })
+            .end(function (err, res) {
+                res.should.have.status(412);
+                done();
+            });
     })
 })
 
 describe('Studentenhuis API GET all', () => {
     it('should throw an error when using invalid JWT token', (done) => {
         //
+        const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjR9.3Ct8wyd-7Ya0fEBzVXuAtHp2iwKqAfQPFBoLsDW-1yY"
+        chai.request(server)
+            .get()
         // Hier schrijf je jouw testcase.
         //
         done()

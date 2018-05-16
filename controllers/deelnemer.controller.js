@@ -103,6 +103,9 @@ module.exports = {
             'WHERE `UserID`=' + idFromToken + ' AND `StudentenhuisID`=' + houseId + ' AND `MaaltijdId`= '+ maaltijdId + '' ;
         const deleteQuery = 'DELETE FROM deelnemers Where `UserID`=' + idFromToken;
 
+        console.log(getDeelnemers);
+        console.log(deleteQuery);
+
         db.query(getDeelnemers, (error,deelnemers)=>{
             if (error){
                 res.status(500).json(error.toString())

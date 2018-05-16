@@ -58,7 +58,7 @@ module.exports = {
         const postquery = 'INSERT INTO `studentenhuis` (`Naam`,`Adres`,`UserID`)\n' +
             'VALUES(\'' + name + '\',\'' + adress + '\',' + id + ')'
      //   console.log(postquery);
-        if (name !== '' || adress !== '') {
+        if (name !== '' && adress !== '') {
 
             db.query(postquery,
                 (error, rows, fields) => {
