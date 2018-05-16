@@ -36,7 +36,7 @@ router.route('/login')
     .post(function(req, res) {
         console.log("////////////LOGIN REQUEST////////////");
         console.log("trying to login..")
-        var mail = req.body.mail || '';
+        var mail = req.body.email || '';
         var password = req.body.password || '';
         let resultfromquery = [];
         let id;
