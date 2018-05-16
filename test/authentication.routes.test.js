@@ -5,19 +5,6 @@ const chai = require('chai')
 const chaiHttp = require('chai-http')
 const server = require('../server')
 
-const User = require('../modules/')
-
-//All info needed for tests
-//Token
-const tokenEncoded = require('../auth/authentication').encodeToken
-const tokenDecoded = require('../auth/authentication').decodeToken
-
-chai.should()
-chai.use(chaiHttp)
-
-// After successful registration we have a valid token. We export this token
-// for usage in other testcases that require login.
-let validToken
 
 //JWT token testing from Diederich
 describe('V1 Roommate', () => {
