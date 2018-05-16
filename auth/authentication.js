@@ -1,6 +1,5 @@
 
 const settings = require('../config')
-const moment = require('moment')
 const jwt = require('jwt-simple')
 
 function encodeToken(userid) {
@@ -16,7 +15,6 @@ function decodeToken(token, callback) {
     console.log("Token found");
     try {
         const payload = jwt.decode(token, settings.secretkey)
-        const now = moment().unix();
         const id = payload.sub;
         console.log("ID: " + id + " obtained from token, acces granted");
         callback(null, payload)
