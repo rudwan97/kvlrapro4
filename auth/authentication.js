@@ -27,11 +27,7 @@ function decodeToken(token, callback) {
         const now = moment().unix();
         const id = payload.sub;
         console.log("ID: " + id + " obtained from token, acces granted");
-        if (now > payload.exp) {
-            callback('Token has expired!', null)
-        } else {
-            callback(null, payload)
-        }
+        callback(null, payload)
     } catch (err) {
         callback(err, null)
     }

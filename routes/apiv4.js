@@ -32,7 +32,7 @@ function getid(req) {
 }
 router.route('/login')
     .post(function(req, res) {
-        console.log("////////////NEW REQUEST////////////");
+        console.log("////////////LOGIN REQUEST////////////");
         console.log("trying to login..")
         var mail = req.body.mail || '';
         var password = req.body.password || '';
@@ -70,7 +70,7 @@ router.route('/login')
     });
 router.route('/register')
     .post(function(req, res) {
-        console.log("////////////NEW REQUEST////////////")
+        console.log("////////////REGISTER REQUEST////////////")
         console.log("attempting to register...");
         var firstname = req.body.firstname
         var lastname = req.body.lastname
@@ -81,7 +81,7 @@ router.route('/register')
             ' VALUES (\'' + firstname + '\', \'' + lastname + '\', \'' + mail + '\', \'' + password + '\');';
         console.log("inserting sqlquery...");
         console.log(insertQuery);
-        if (!isEmpty(firstname), !isEmpty(lastname, !isEmpty(mail, !isEmpty(password)))) {
+        if (firstname !== '' && lastname !== '' && mail !=='' && password !== '') {
             db.query(insertQuery, (error, rows, fields) => {
                 if (error) {
                     res.status(500).json(error.toString())
