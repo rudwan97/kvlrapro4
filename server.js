@@ -20,7 +20,7 @@ app.all('*', (request, respons)=>{
 });
 //
 
-var port = 5000;
+var port = process.env.PORT;
 app.listen(port, () =>{
     console.log("server is starting");
 });

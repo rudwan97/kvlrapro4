@@ -62,6 +62,7 @@ describe('Studentenhuis API GET all', () => {
         done()
     })
 
+
     it('should return all studentenhuizen when using a valid token', (done) => {
         //
         // Hier schrijf je jouw testcase.
