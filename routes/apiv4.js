@@ -8,6 +8,7 @@ const moment = require('moment')
 const jwt = require('jwt-simple')
 const housecontroller = require('../controllers/studentenhuis.controller');
 const mealcontroller = require('../controllers/meal.controller');
+const deelnemercontroller = require('../controllers/deelnemer.controller');
 
 router.all(new RegExp("[^(/login|register)]"), function(req, res, next) {
     console.log("////////////VALIDATING TOKEN////////////");
@@ -78,7 +79,7 @@ router.route('/register')
         console.log("attempting to register...");
         var firstname = req.body.firstname || ''
         var lastname = req.body.lastname|| ''
-        var mail = req.body.mail|| ''
+        var mail = req.body.email|| ''
         var password = req.body.password|| ''
         const insertQuery = 'INSERT INTO `user` ' +
             '(`Voornaam`, `Achternaam`, `Email`, `Password`)' +
@@ -86,17 +87,24 @@ router.route('/register')
         console.log("inserting sqlquery...");
         console.log(insertQuery);
         if (firstname !== '' && lastname !== '' && mail !=='' && password !== '') {
-            db.query(insertQuery, (error, rows, fields) => {
-                if (error) {
-                    res.status(500).json(error.toString())
-                    console.log("Registreren gestopt");
-                } else {
-                    res.status(200).json({
-                        message: "Register succesfull, /login with mail and password to obtain api key"
-                    })
-                    console.log("account aangemaakt")
-                }
-            });
+            db.query('SELECT * FROM user WHERE `Email` = \''+ mail + '\'', (error,selectRows) =>{
+            if (selectRows.length !== 1) {
+                db.query(insertQuery, (error, insertRows, fields) => {
+                    if (error) {
+                        res.status(500).json(error.toString())
+                        console.log("Registreren gestopt");
+                    } else {
+                        res.status(200).json({
+                            message: "Register succesfull, /login with mail and password to obtain api key"
+                        })
+                        console.log("account aangemaakt")
+                    }
+                });
+            }else{
+                res.status(500).json({"message" : "Account bestaat al"})
+            }
+        })
+
         } else {
             res.status(412).json({
                 'message': "Een of meer properties in de request body ontbreken of zijn foutief"
@@ -115,39 +123,8 @@ router.delete('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.deleteMeal);
 router.get('/studentenhuis/:id/maaltijd/:maaltijd?',mealcontroller.getMeal);
 router.put('/studentenhuis/:id/maaltijd/:mealid', mealcontroller.putMeal)
 
+router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', deelnemercontroller.getDeelnemers);
+router.delete('/studentenhuis/:id/maaltijd/:maaltijdid/deelnemers', deelnemercontroller.deleteDeelnemer);
 
 
-router.get('/studentenhuis/:id/maaltijd/:maaltijd/deelnemers', (req, res, next) => {
-    const meal = req.params.maaltijd || '';
-    const id = req.params.id || '';
-    let users = [];
-    let userid = [];
-    db.query('SELECT UserID ' +
-        'FROM `deelnemers` ' +
-        'WHERE `StudentenhuisID` = ' + id +
-        ' AND `MaaltijdID` = ' + meal, (error, rows, fields) => {
-        if (error) {
-            res.status(500).json(error.toString())
-        } else {
-            console.log(rows)
-            users = rows;
-            for (let i = 0; i < users.length; i++) {
-                console.log(users[i].UserID);
-                userid[i] = users[i].UserID;
-                console.log(userid)
-            }
-        }
-    });
-    db.query('SELECT `Voornaam`, `Achternaam`, `Email` FROM `user` WHERE `ID` = ' + userid[0], (error, rows, fields) => {
-        if (error) {
-            res.status(500).json(error.toString())
-        } else {
-            res.status(200).json(rows)
-            console.log(rows)
-        }
-    })
-});
-function isEmpty(str) {
-    return (!str || 0 === str.length);
-}
 module.exports = router;
