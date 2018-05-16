@@ -1,10 +1,9 @@
 const express = require('express');
-const users = require('../modules/user_ds');
+
 const router = express.Router();
 const db = require('../db/connector');
 const auth = require('../auth/authentication');
 const settings = require('../config')
-const moment = require('moment')
 const jwt = require('jwt-simple')
 const housecontroller = require('../controllers/studentenhuis.controller');
 const mealcontroller = require('../controllers/meal.controller');
@@ -29,8 +28,7 @@ router.all(new RegExp("[^(/login|register)]"), function(req, res, next) {
 function getid(req) {
     var token = (req.header('X-Access-Token')) || '';
     const payload = jwt.decode(token, settings.secretkey)
-    const id = payload.sub;
-    return id;
+    return payload.sub;
 }
 router.route('/login')
     .post(function(req, res) {

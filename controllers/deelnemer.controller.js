@@ -1,4 +1,3 @@
-const express = require('express');
 const db = require('../db/connector');
 const jwt = require('jwt-simple');
 const settings = require('../config');
@@ -12,28 +11,24 @@ function getid(req) {
 
 module.exports = {
     getDeelnemers(req, res, next) {
-    const meal = req.params.maaltijd || '';
-    const id = req.params.id || '';
-    let users = [];
-    let userData = [];
-    // let userIds = [];
 
+    const meal = req.params.maaltijd || ''; const id = req.params.id || '';
 
     const userIdQuery = 'SELECT UserID ' +
         'FROM `deelnemers` ' +
         'WHERE `StudentenhuisID` = ' + id +
-        ' AND `MaaltijdID` = ' + meal
+        ' AND `MaaltijdID` = ' + meal;
 
+    let selectUserData = 'SELECT `Voornaam`, `Achternaam`, `Email` FROM `user` WHERE ';
+
+
+    console.log(userIdQuery);
     db.query(userIdQuery, (error, userIds) => {
         if (userIds.length !== 0) {
-            //userIds is aantal users
-            let selectUserData = 'SELECT `Voornaam`, `Achternaam`, `Email` FROM `user` WHERE ';
             for (var i = 0; i < userIds.length; i++) {
                 console.log("for loop")
                 selectUserData += ' `ID` = ' + userIds[i].UserID + ' OR'
             }
-
-            console.log(selectUserData)
             selectUserData = selectUserData.slice(0, -1);
             selectUserData = selectUserData.slice(0, -1);
             console.log(selectUserData)
@@ -43,7 +38,6 @@ module.exports = {
                     res.status(500).json(error.toString())
                 } else {
                     res.status(200).json(rows)
-                    userData = rows
                 }
             })
         } else {

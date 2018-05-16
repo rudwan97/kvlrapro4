@@ -21,7 +21,6 @@ function encodeToken(userid) {
 
 function decodeToken(token, callback) {
     console.log("Token found");
-
     try {
         const payload = jwt.decode(token, settings.secretkey)
         const now = moment().unix();
