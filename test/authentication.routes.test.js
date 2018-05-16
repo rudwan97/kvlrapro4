@@ -14,26 +14,6 @@ chai.should()
 chai.use(chaiHttp)
 
 
-// //JWT token testing from Diederich
-// describe('V1 Roommate', () => {
-//     var token = null;
-//
-//     before(function(done) {
-//         chai.request(server)
-//             .get('/studentenhuis')
-//             .send(
-//                 {
-//                     "email": "testcase@test.com",
-//                     "password":"secret"
-//                 })
-//             .end(function(err, res) {
-//                 token = res.body.token;
-//                 done();
-//             });
-//     });
-//
-// })
-
 
 describe('Registration', () => {
     //Er kan maar 1 email een account aan gemaakt worden
