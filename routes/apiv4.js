@@ -16,7 +16,8 @@ router.all(new RegExp("[^(/login|register)]"), function(req, res, next) {
         if (err) {
             console.log('Error handler: ' + err.message);
             res.status((err.status || 401)).json({
-                error: new Error("Not authorised").message
+                error:
+                "Niet geautoriseerd (geen valid token)"
             });
         } else {
             next();
@@ -48,8 +49,11 @@ router.route('/login')
             if (error) {
                 res.status(500).json(error.toString())
             } else if (rows.length === 0) {
-                res.status(500).json('User not found, Please register first')
-            } else {
+                res.status(404).json( {"message" :'User not found, Please register first'})
+            } else if(name === '' && email === '') {
+                res.status(412).json({message: "Een of meer properties in de request body ontbreken of zijn foutief"})
+            }
+            else{
                 //res.status(200).json(rows)
                 console.log(rows);
                 resultfromquery = rows;
@@ -72,10 +76,10 @@ router.route('/register')
     .post(function(req, res) {
         console.log("////////////REGISTER REQUEST////////////")
         console.log("attempting to register...");
-        var firstname = req.body.firstname
-        var lastname = req.body.lastname
-        var mail = req.body.mail
-        var password = req.body.password
+        var firstname = req.body.firstname || ''
+        var lastname = req.body.lastname|| ''
+        var mail = req.body.mail|| ''
+        var password = req.body.password|| ''
         const insertQuery = 'INSERT INTO `user` ' +
             '(`Voornaam`, `Achternaam`, `Email`, `Password`)' +
             ' VALUES (\'' + firstname + '\', \'' + lastname + '\', \'' + mail + '\', \'' + password + '\');';
@@ -94,8 +98,8 @@ router.route('/register')
                 }
             });
         } else {
-            res.status(500).json({
-                'error': "One or more fields are empty"
+            res.status(412).json({
+                'message': "Een of meer properties in de request body ontbreken of zijn foutief"
             });
             console.log("Registreren gestopt");
         }
