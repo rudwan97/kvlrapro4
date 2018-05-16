@@ -1,14 +1,8 @@
-//
-// Authentication using JSON Web Token (JWT)
-// Save this e.g. as ./util/auth/authentication.js
-//
+
 const settings = require('../config')
 const moment = require('moment')
 const jwt = require('jwt-simple')
 
-//
-// Encode (from username to token)
-//
 function encodeToken(userid) {
     console.log("Creating token");
     const playload = {
@@ -16,7 +10,6 @@ function encodeToken(userid) {
     }
     console.log("New token generated with ID " + userid);
     return jwt.encode(playload, settings.secretkey)
-
 }
 
 function decodeToken(token, callback) {
@@ -30,10 +23,9 @@ function decodeToken(token, callback) {
     } catch (err) {
         callback(err, null)
     }
-
 }
 
 module.exports = {
     encodeToken,
     decodeToken
-}
+};

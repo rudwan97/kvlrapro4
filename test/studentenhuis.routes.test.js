@@ -104,8 +104,8 @@ describe('Studentenhuis API GET one', () => {
             .set('x-access-token', invalidToken)
             .end(function(err,res){
                 res.should.have.status(401)
+                done()
             })
-        done()
     })
 
     it('should return the correct studentenhuis when using an existing huisId', (done) => {
@@ -114,8 +114,9 @@ describe('Studentenhuis API GET one', () => {
             .set('x-access-token', token)
             .end(function(err,res){
                 res.should.have.status(200)
+                done()
             })
-        done()
+
     })
 
     it('should return an error when using an non-existing huisId', (done) => {
@@ -124,8 +125,9 @@ describe('Studentenhuis API GET one', () => {
             .set('x-access-token', token)
             .end(function(err,res){
                 res.should.have.status(404)
+                done();
             });
-        done();
+
     });
 });
 
@@ -140,8 +142,8 @@ describe('Studentenhuis API PUT', () => {
           })
           .end(function(err,res){
               res.should.have.status(401)
+              done();
           });
-        done();
     });
 
     it('should return a studentenhuis with ID when posting a valid object', (done) => {
@@ -154,8 +156,8 @@ describe('Studentenhuis API PUT', () => {
             })
         .end(function(err,res){
             res.should.have.status(200)
+            done();
         });
-        done();
     });
 
     it('should throw an error when naam is missing', (done) => {
@@ -168,8 +170,8 @@ describe('Studentenhuis API PUT', () => {
             })
             .end(function(err, res){
                 res.should.have.status(412)
+                done()
             })
-        done()
     })
 
     it('should throw an error when adres is missing', (done) => {
@@ -183,9 +185,8 @@ describe('Studentenhuis API PUT', () => {
             })
             .end(function(err, res){
                 res.should.have.status(412)
+                done()
             })
-        done()
-        done()
     })
 })
 
@@ -200,28 +201,8 @@ describe('Studentenhuis API DELETE', () => {
             })
             .end(function(err,res){
                 res.should.have.status(401);
+                done();
             });
-        done();
+
     });
-    //
-    // it('should return a studentenhuis when posting a valid object', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
-    //
-    // it('should throw an error when naam is missing', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
-    //
-    // it('should throw an error when adres is missing', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
 })

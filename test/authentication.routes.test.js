@@ -19,9 +19,6 @@ describe('Registration', () => {
     //Er kan maar 1 email een account aan gemaakt worden
     //Dus testen met 200 kunnen alleen slagen met een nieuw email
     it('should return a token when providing valid information', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
         chai.request(server)
             .post('/apiv4/register')
             .send({
@@ -36,15 +33,6 @@ describe('Registration', () => {
                 res.body.should.have.property('message');
                 done();
             });
-
-
-        // Tip: deze test levert een token op. Dat token gebruik je in 
-        // andere testcases voor beveiligde routes door het hier te exporteren
-        // en in andere testcases te importeren via require.
-        // validToken = res.body.token
-        // module.exports = {
-        //     token: validToken
-        // }
 
     })
 
@@ -96,13 +84,6 @@ describe('Registration', () => {
             });
     })
 
-    // it('should throw an error when firstname is shorter than 2 chars', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
-
     it('should throw an error when no lastname is provided', (done) => {
 
         chai.request(server)
@@ -120,26 +101,11 @@ describe('Registration', () => {
             });
     })
 
-    // it('should throw an error when lastname is shorter than 2 chars', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
-
-    // it('should throw an error when email is invalid', (done) => {
-    //     //
-    //     // Hier schrijf je jouw testcase.
-    //     //
-    //     done()
-    // })
-
-})
+});
 
 describe('Login', () => {
 
     it('should return a token when providing valid information', (done) => {
-
         chai.request(server)
             .post('/apiv4/login')
             .send({
