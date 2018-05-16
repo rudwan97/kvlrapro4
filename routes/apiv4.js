@@ -51,7 +51,7 @@ router.route('/login')
                 res.status(500).json(error.toString())
             } else if (rows.length === 0) {
                 res.status(404).json( {"message" :'User not found, Please register first'})
-            } else if(name === '' && email === '') {
+            } else if(mail === '' && email === '') {
                 res.status(412).json({message: "Een of meer properties in de request body ontbreken of zijn foutief"})
             }
             else{
@@ -101,7 +101,7 @@ router.route('/register')
                     }
                 });
             }else{
-                res.status(500).json({"message" : "Account bestaat al"})
+                res.status(409).json({"message" : "Account bestaat al"})
             }
         })
 
